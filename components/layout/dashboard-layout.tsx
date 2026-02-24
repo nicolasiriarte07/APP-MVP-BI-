@@ -10,7 +10,7 @@ import { processExcelData, parseCSV } from '@/lib/cohort-utils'
 import type { CohortAnalysis } from '@/lib/types'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
-import { AlertCircle, RotateCcw, Loader2, BarChart3 } from 'lucide-react'
+import { AlertCircle, RotateCcw, Loader2, BarChart3, XCircle } from 'lucide-react'
 
 export function DashboardLayout({
   children,
@@ -25,18 +25,22 @@ export function DashboardLayout({
   const handleFileLoaded = useCallback((data: Record<string, unknown>[]) => {
     setIsProcessing(true)
     setErrors([])
-    
+
     setTimeout(() => {
-      const result = processExcelData(data, { observationWindow: 12 })
-      
-      if (result.analysis) {
-        setAnalysis(result.analysis)
+      try {
+        const result = processExcelData(data, { observationWindow: 12 })
+
+        if (result.analysis) {
+          setAnalysis(result.analysis)
+        }
+
+        if (result.errors.length > 0) {
+          setErrors(result.errors)
+        }
+      } catch (err) {
+        setErrors([err instanceof Error ? err.message : 'Error al procesar el archivo'])
       }
-      
-      if (result.errors.length > 0) {
-        setErrors(result.errors)
-      }
-      
+
       setIsProcessing(false)
     }, 0)
   }, [])
@@ -84,16 +88,33 @@ export function DashboardLayout({
                   </div>
                 </div>
                 
-                <div className="mx-auto w-full max-w-xl">
-                  <FileUploader 
-                    onFileLoaded={handleFileLoaded} 
+                <div className="mx-auto w-full max-w-xl space-y-4">
+                  <FileUploader
+                    onFileLoaded={handleFileLoaded}
                     isLoading={isProcessing}
                   />
-                  
+
                   {isProcessing && (
                     <p className="mt-4 text-center text-sm text-muted-foreground">
                       Procesando datos...
                     </p>
+                  )}
+
+                  {!isProcessing && errors.length > 0 && (
+                    <Alert variant="destructive">
+                      <XCircle className="h-4 w-4" />
+                      <AlertTitle>No se pudo procesar el archivo</AlertTitle>
+                      <AlertDescription>
+                        <ul className="mt-1 list-inside list-disc space-y-1">
+                          {errors.map((error, i) => (
+                            <li key={i} className="text-sm">{error}</li>
+                          ))}
+                        </ul>
+                        <p className="mt-2 text-xs text-muted-foreground">
+                          Asegurate de que el CSV tenga columnas de email, fecha y monto.
+                        </p>
+                      </AlertDescription>
+                    </Alert>
                   )}
                 </div>
               </div>
