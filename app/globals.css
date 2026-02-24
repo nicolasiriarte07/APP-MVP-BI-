@@ -1,0 +1,136 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: #0F1419;
+  --foreground: #FFFFFF;
+  --card: #1A1F26;
+  --card-foreground: #FFFFFF;
+  --popover: #1A1F26;
+  --popover-foreground: #FFFFFF;
+  --primary: #01d280;
+  --primary-foreground: #000000;
+  --secondary: #232931;
+  --secondary-foreground: #FFFFFF;
+  --muted: #8B98A5;
+  --muted-foreground: #B8C5D0;
+  --accent: #01d280;
+  --accent-foreground: #000000;
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --border: #2A3038;
+  --input: #232931;
+  --ring: #01d280;
+  --chart-1: #01d280;
+  --chart-2: #3B82F6;
+  --chart-3: #F59E0B;
+  --chart-4: #EF4444;
+  --chart-5: #8B5CF6;
+  --radius: 0.75rem;
+  --sidebar: #0F1419;
+  --sidebar-foreground: #FFFFFF;
+  --sidebar-primary: #01d280;
+  --sidebar-primary-foreground: #000000;
+  --sidebar-accent: #232931;
+  --sidebar-accent-foreground: #01d280;
+  --sidebar-border: #2A3038;
+  --sidebar-ring: #01d280;
+}
+
+.dark {
+  --background: #2a2a2a;
+  --foreground: #ffffff;
+  --card: #333333;
+  --card-foreground: #ffffff;
+  --popover: #333333;
+  --popover-foreground: #ffffff;
+  --primary: #00ff88;
+  --primary-foreground: #000000;
+  --secondary: #444444;
+  --secondary-foreground: #ffffff;
+  --muted: #666666;
+  --muted-foreground: #999999;
+  --accent: #00ff88;
+  --accent-foreground: #000000;
+  --destructive: #ff4444;
+  --destructive-foreground: #ffffff;
+  --border: #444444;
+  --input: #333333;
+  --ring: #00ff88;
+  --chart-1: #00ff88;
+  --chart-2: #00bbff;
+  --chart-3: #ffbb00;
+  --chart-4: #ff4444;
+  --chart-5: #bb88ff;
+  --sidebar: #1f1f1f;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #00ff88;
+  --sidebar-primary-foreground: #000000;
+  --sidebar-accent: #333333;
+  --sidebar-accent-foreground: #00ff88;
+  --sidebar-border: #444444;
+  --sidebar-ring: #00ff88;
+}
+
+body {
+  font-family: 'Geist', 'Geist Fallback', system-ui, sans-serif;
+}
+
+/* Custom utility classes using CSS variables */
+.border-border {
+  border-color: var(--border);
+}
+
+.bg-background {
+  background-color: var(--background);
+}
+
+.bg-card {
+  background-color: var(--card);
+}
+
+.bg-popover {
+  background-color: var(--popover);
+}
+
+.bg-input {
+  background-color: var(--input);
+}
+
+.text-foreground {
+  color: var(--foreground);
+}
+
+.text-muted-foreground {
+  color: var(--muted-foreground);
+}
+
+.text-card-foreground {
+  color: var(--card-foreground);
+}
+
+.text-primary {
+  color: var(--primary);
+}
+
+.text-accent {
+  color: var(--accent);
+}
+
+.text-destructive {
+  color: var(--destructive);
+}
+
+.bg-foreground {
+  background-color: var(--foreground);
+}
+
+.outline-ring {
+  outline-color: var(--ring);
+}
+
+.border-ring {
+  border-color: var(--ring);
+}
