@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { CSVUpload } from '@/components/import/csv-upload'
-import { IndustrySelector } from '@/components/import/industry-selector'
+import { IndustrySelector, type Industry } from '@/components/import/industry-selector'
 import { useData } from '@/components/layout/data-provider'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -133,9 +133,9 @@ export default function ImportPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <IndustrySelector 
+                <IndustrySelector
                   onSelect={handleIndustrySelected}
-                  selected={industry}
+                  selected={(industry as Industry) ?? undefined}
                   isVisible={true}
                 />
               </CardContent>
