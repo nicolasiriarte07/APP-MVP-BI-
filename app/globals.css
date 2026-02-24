@@ -4,78 +4,110 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: #0F1419;
-  --foreground: #FFFFFF;
-  --card: #1A1F26;
-  --card-foreground: #FFFFFF;
-  --popover: #1A1F26;
-  --popover-foreground: #FFFFFF;
-  --primary: #01d280;
-  --primary-foreground: #000000;
-  --secondary: #232931;
-  --secondary-foreground: #FFFFFF;
-  --muted: #8B98A5;
-  --muted-foreground: #B8C5D0;
-  --accent: #01d280;
-  --accent-foreground: #000000;
-  --destructive: #EF4444;
-  --destructive-foreground: #FFFFFF;
-  --border: #2A3038;
-  --input: #232931;
-  --ring: #01d280;
-  --chart-1: #01d280;
-  --chart-2: #3B82F6;
-  --chart-3: #F59E0B;
-  --chart-4: #EF4444;
-  --chart-5: #8B5CF6;
+  /* ── Design System: Dhan-Inspired Financial (Light Theme) ── */
+
+  /* Backgrounds */
+  --background: #f3f4f6;        /* neutral-100 — app shell */
+  --foreground: #1f2937;        /* neutral-800 — primary text */
+
+  /* Cards / Surfaces */
+  --card: #ffffff;
+  --card-foreground: #1f2937;
+  --popover: #ffffff;
+  --popover-foreground: #1f2937;
+
+  /* Brand — Teal */
+  --primary: #14b8a6;           /* primary-500 */
+  --primary-foreground: #ffffff;
+
+  /* Secondary — light teal tint (used for ghost/secondary buttons & active nav) */
+  --secondary: #f0fdf9;         /* primary-50 */
+  --secondary-foreground: #0f766e; /* primary-700 */
+
+  /* Muted */
+  --muted: #f3f4f6;             /* neutral-100 */
+  --muted-foreground: #6b7280;  /* neutral-500 */
+
+  /* Accent (same as primary for this design system) */
+  --accent: #14b8a6;
+  --accent-foreground: #ffffff;
+
+  /* Destructive */
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+
+  /* Borders / Inputs */
+  --border: #e5e7eb;            /* neutral-200 */
+  --input: #e5e7eb;
+  --ring: #14b8a6;
+
+  /* Charts */
+  --chart-1: #14b8a6;           /* teal */
+  --chart-2: #3b82f6;           /* blue */
+  --chart-3: #f59e0b;           /* amber */
+  --chart-4: #ef4444;           /* red */
+  --chart-5: #8b5cf6;           /* purple */
+
+  /* Radius (matches design system --radius-lg: 12px) */
   --radius: 0.75rem;
-  --sidebar: #0F1419;
-  --sidebar-foreground: #FFFFFF;
-  --sidebar-primary: #01d280;
-  --sidebar-primary-foreground: #000000;
-  --sidebar-accent: #232931;
-  --sidebar-accent-foreground: #01d280;
-  --sidebar-border: #2A3038;
-  --sidebar-ring: #01d280;
+
+  /* Sidebar — white, design system style */
+  --sidebar: #ffffff;
+  --sidebar-foreground: #1f2937;
+  --sidebar-primary: #14b8a6;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f0fdf9;
+  --sidebar-accent-foreground: #0f766e;
+  --sidebar-border: #e5e7eb;
+  --sidebar-ring: #14b8a6;
+
+  /* Semantic helpers */
+  --success: #22c55e;
+  --success-bg: #dcfce7;
+  --warning: #f59e0b;
+  --warning-bg: #fef3c7;
+  --info: #3b82f6;
+  --info-bg: #dbeafe;
 }
 
 .dark {
-  --background: #2a2a2a;
-  --foreground: #ffffff;
-  --card: #333333;
-  --card-foreground: #ffffff;
-  --popover: #333333;
-  --popover-foreground: #ffffff;
-  --primary: #00ff88;
-  --primary-foreground: #000000;
-  --secondary: #444444;
-  --secondary-foreground: #ffffff;
-  --muted: #666666;
-  --muted-foreground: #999999;
-  --accent: #00ff88;
-  --accent-foreground: #000000;
-  --destructive: #ff4444;
+  --background: #0f172a;
+  --foreground: #f1f5f9;
+  --card: #1e293b;
+  --card-foreground: #f1f5f9;
+  --popover: #1e293b;
+  --popover-foreground: #f1f5f9;
+  --primary: #2dd4bf;
+  --primary-foreground: #0f172a;
+  --secondary: #134e4a;
+  --secondary-foreground: #2dd4bf;
+  --muted: #1e293b;
+  --muted-foreground: #94a3b8;
+  --accent: #2dd4bf;
+  --accent-foreground: #0f172a;
+  --destructive: #ef4444;
   --destructive-foreground: #ffffff;
-  --border: #444444;
-  --input: #333333;
-  --ring: #00ff88;
-  --chart-1: #00ff88;
-  --chart-2: #00bbff;
-  --chart-3: #ffbb00;
-  --chart-4: #ff4444;
-  --chart-5: #bb88ff;
-  --sidebar: #1f1f1f;
-  --sidebar-foreground: #ffffff;
-  --sidebar-primary: #00ff88;
-  --sidebar-primary-foreground: #000000;
-  --sidebar-accent: #333333;
-  --sidebar-accent-foreground: #00ff88;
-  --sidebar-border: #444444;
-  --sidebar-ring: #00ff88;
+  --border: #334155;
+  --input: #334155;
+  --ring: #2dd4bf;
+  --chart-1: #2dd4bf;
+  --chart-2: #60a5fa;
+  --chart-3: #fbbf24;
+  --chart-4: #f87171;
+  --chart-5: #a78bfa;
+  --sidebar: #0f172a;
+  --sidebar-foreground: #f1f5f9;
+  --sidebar-primary: #2dd4bf;
+  --sidebar-primary-foreground: #0f172a;
+  --sidebar-accent: #134e4a;
+  --sidebar-accent-foreground: #2dd4bf;
+  --sidebar-border: #334155;
+  --sidebar-ring: #2dd4bf;
 }
 
 body {
-  font-family: 'Geist', 'Geist Fallback', system-ui, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Helvetica, Arial, sans-serif;
 }
 
 /* Custom utility classes using CSS variables */

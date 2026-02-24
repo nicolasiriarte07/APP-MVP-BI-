@@ -40,14 +40,18 @@ export function Sidebar() {
         }`}
       >
         <div className="p-6">
+          {/* Logo */}
           <div className="flex items-center gap-2 mb-8">
-            <div className="rounded-lg bg-accent/10 p-2">
-              <BarChart3 className="h-6 w-6 text-accent" />
+            <div className="rounded-lg bg-[#f0fdf9] p-2">
+              <BarChart3 className="h-6 w-6 text-[#14b8a6]" />
             </div>
-            <h1 className="text-lg font-bold text-foreground">Nexo</h1>
+            <h1 className="text-lg font-bold text-foreground">
+              Nexo<span className="text-[#14b8a6]">BI</span>
+            </h1>
           </div>
 
-          <nav className="space-y-2">
+          {/* Nav */}
+          <nav className="space-y-1">
             {navigationItems.map((item) => {
               const Icon = item.icon
               const isActive = pathname.includes(item.href)
@@ -57,14 +61,14 @@ export function Sidebar() {
                   key={item.href}
                   href={item.href}
                   onClick={() => setIsOpen(false)}
-                  className={`flex items-center gap-3 px-4 py-2 rounded-lg transition-colors ${
+                  className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all duration-200 ${
                     isActive
-                      ? 'bg-accent text-accent-foreground'
-                      : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                      ? 'bg-[#f0fdf9] text-[#0f766e] font-semibold'
+                      : 'text-[#4b5563] font-medium hover:bg-[#f0fdf9] hover:text-[#0f766e]'
                   }`}
                 >
-                  <Icon className="h-5 w-5" />
-                  <span className="text-sm font-medium">{item.label}</span>
+                  <Icon className="h-4 w-4 shrink-0" />
+                  <span>{item.label}</span>
                 </Link>
               )
             })}
