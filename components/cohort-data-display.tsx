@@ -318,7 +318,7 @@ export function CohortDataDisplay({ analysis }: CohortDataDisplayProps) {
                         {formatDate(customer.firstPurchaseDate)}
                       </TableCell>
                       <TableCell className="text-sm text-muted-foreground">
-                        {formatDate(lastPurchase.paymentDate)}
+                        {formatDate(new Date(lastPurchase.paymentDate))}
                       </TableCell>
                     </TableRow>
                   )
