@@ -1,46 +1,77 @@
-import * as React from 'react'
-import { Slot } from '@radix-ui/react-slot'
-import { cva, type VariantProps } from 'class-variance-authority'
-
-import { cn } from '@/lib/utils'
+import * as React from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
-  'inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden',
+  "inline-flex items-center px-2 py-0.5 rounded-[6px] text-[11px] font-bold uppercase tracking-wide",
   {
     variants: {
       variant: {
-        default:
-          'border-transparent bg-primary text-primary-foreground [a&]:hover:bg-primary/90',
-        secondary:
-          'border-transparent bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90',
-        destructive:
-          'border-transparent bg-destructive text-white [a&]:hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60',
-        outline:
-          'text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground',
+        // Design system variants
+        primary:   "bg-primary/10 text-primary",
+        secondary: "bg-secondary text-secondary-foreground",
+        success:   "bg-[#DCFCE7] text-[#166534]",
+        warning:   "bg-yellow-100 text-yellow-800",
+        error:     "bg-[#FEE2E2] text-[#991B1B]",
+        info:      "bg-[#DBEAFE] text-[#1E40AF]",
+        // Shadcn-compatible aliases
+        default:     "border-transparent bg-primary text-primary-foreground",
+        destructive: "border-transparent bg-destructive text-white",
+        outline:     "text-foreground border border-input",
       },
     },
     defaultVariants: {
-      variant: 'default',
+      variant: "primary",
     },
-  },
-)
+  }
+);
 
-function Badge({
-  className,
-  variant,
-  asChild = false,
-  ...props
-}: React.ComponentProps<'span'> &
-  VariantProps<typeof badgeVariants> & { asChild?: boolean }) {
-  const Comp = asChild ? Slot : 'span'
+const statusPillVariants = cva(
+  "inline-block px-3 py-1 rounded-full text-xs font-semibold",
+  {
+    variants: {
+      variant: {
+        default: "bg-yellow-100 text-yellow-800",
+        success: "bg-[#DCFCE7] text-[#166534]",
+        error:   "bg-[#FEE2E2] text-[#991B1B]",
+        info:    "bg-[#DBEAFE] text-[#1E40AF]",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+);
 
-  return (
-    <Comp
+export interface BadgeProps
+  extends React.HTMLAttributes<HTMLSpanElement>,
+    VariantProps<typeof badgeVariants> {}
+
+const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
+  ({ className, variant, ...props }, ref) => (
+    <span
+      ref={ref}
       data-slot="badge"
       className={cn(badgeVariants({ variant }), className)}
       {...props}
     />
   )
-}
+);
+Badge.displayName = "Badge";
 
-export { Badge, badgeVariants }
+export interface StatusPillProps
+  extends React.HTMLAttributes<HTMLSpanElement>,
+    VariantProps<typeof statusPillVariants> {}
+
+const StatusPill = React.forwardRef<HTMLSpanElement, StatusPillProps>(
+  ({ className, variant, ...props }, ref) => (
+    <span
+      ref={ref}
+      className={cn(statusPillVariants({ variant }), className)}
+      {...props}
+    />
+  )
+);
+StatusPill.displayName = "StatusPill";
+
+export { Badge, badgeVariants, StatusPill };
