@@ -85,12 +85,24 @@ const AMOUNT_KEYS = [
 const PRODUCT_KEYS = [
   'product', 'Product', 'producto', 'Producto', 'item', 'Item',
   'product_name', 'name', 'Name', 'sku', 'SKU',
-  'Nombre del producto', 'nombre_producto',
+  'Nombre del producto', 'nombre_producto', 'Productos',
 ]
+
+// Prefix patterns used as fallback when exact key matching fails
+const AMOUNT_PREFIXES = ['Importe total', 'importe total', 'Total (', 'total (']
 
 function findKey(row: Record<string, unknown>, candidates: string[]): string | null {
   for (const key of candidates) {
     if (key in row) return key
+  }
+  return null
+}
+
+function findKeyByPrefix(row: Record<string, unknown>, prefixes: string[]): string | null {
+  for (const key of Object.keys(row)) {
+    for (const prefix of prefixes) {
+      if (key.startsWith(prefix)) return key
+    }
   }
   return null
 }
@@ -101,7 +113,7 @@ function resolveKeys(rows: Record<string, unknown>[]) {
   return {
     emailKey: findKey(sample, EMAIL_KEYS),
     dateKey: findKey(sample, DATE_KEYS),
-    amountKey: findKey(sample, AMOUNT_KEYS),
+    amountKey: findKey(sample, AMOUNT_KEYS) ?? findKeyByPrefix(sample, AMOUNT_PREFIXES),
     productKey: findKey(sample, PRODUCT_KEYS),
   }
 }
