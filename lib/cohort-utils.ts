@@ -80,6 +80,7 @@ const AMOUNT_KEYS = [
   'total', 'Total', 'amount', 'Amount', 'precio', 'Precio', 'monto', 'Monto',
   'subtotal', 'Subtotal', 'revenue', 'Revenue', 'price', 'Price',
   'total_price', 'order_total', 'Subtotal (ARS)', 'Subtotal (USD)', 'Total (ARS)',
+  'Importe total (ARS)', 'Importe total (USD)', 'Importe total',
 ]
 const PRODUCT_KEYS = [
   'product', 'Product', 'producto', 'Producto', 'item', 'Item',
