@@ -113,14 +113,14 @@ export function SegmentContext({ segments }: SegmentContextProps) {
           const Icon = info.icon
 
           return (
-            <Card key={segment.segment} className="border/50 bg-background relative">
+            <Card key={segment.segment} className="relative bg-white border border-gray-200 shadow-md shadow-gray-900/10">
               <div className="absolute top-4 right-4">
-                <Button 
+                <Button
                   size="sm"
                   variant="outline"
                   onClick={() => handleExportSegment(segment.segment)}
                   disabled={exportingSegment === segment.segment}
-                  className="gap-1"
+                  className="gap-1 border-gray-300 text-gray-600 hover:bg-gray-100"
                 >
                   <Download className="h-3 w-3" />
                   {exportingSegment === segment.segment ? 'CSV' : 'CSV'}
@@ -133,24 +133,24 @@ export function SegmentContext({ segments }: SegmentContextProps) {
                     <div className={`rounded-lg ${info.bgColor} p-2`}>
                       <Icon className={`h-5 w-5 ${info.iconColor}`} />
                     </div>
-                    <h4 className="font-semibold text-foreground">{info.title}</h4>
+                    <h4 className="font-semibold text-gray-900">{info.title}</h4>
                   </div>
 
                   {/* Description */}
-                  <p className="text-sm leading-relaxed text-foreground">
+                  <p className="text-sm leading-relaxed text-gray-700">
                     {info.description}
                   </p>
 
                   {/* Behavior */}
-                  <div className="rounded-lg bg-card/50 p-3 border border/30">
-                    <p className="text-xs font-medium text-muted-foreground mb-1">Comportamiento</p>
-                    <p className="text-sm text-foreground">{info.behavior}</p>
+                  <div className="rounded-lg bg-gray-50 p-3 border border-gray-200">
+                    <p className="text-xs font-medium text-gray-500 mb-1">Comportamiento</p>
+                    <p className="text-sm text-gray-700">{info.behavior}</p>
                   </div>
 
                   {/* Action */}
-                  <div className="rounded-lg bg-accent/5 p-3 border-borderaccent/20">
-                    <p className="text-xs font-medium text-accent mb-1">Recomendación</p>
-                    <p className="text-sm text-foreground">{info.action}</p>
+                  <div className="rounded-lg bg-blue-50 p-3 border border-blue-200">
+                    <p className="text-xs font-medium text-blue-600 mb-1">Recomendación</p>
+                    <p className="text-sm text-gray-700">{info.action}</p>
                   </div>
                 </div>
               </CardContent>
