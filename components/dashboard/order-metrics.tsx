@@ -153,7 +153,7 @@ export function OrderMetricsComponent({ orderMetrics }: OrderMetricsProps) {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-500">
+            <div className="text-3xl font-bold text-blue-500">
               {formatCurrency(orderMetrics.aov1)}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
@@ -170,7 +170,7 @@ export function OrderMetricsComponent({ orderMetrics }: OrderMetricsProps) {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-cyan-500">
+            <div className="text-3xl font-bold text-cyan-500">
               {formatCurrency(orderMetrics.aov2)}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
@@ -187,7 +187,7 @@ export function OrderMetricsComponent({ orderMetrics }: OrderMetricsProps) {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-emerald-500">
+            <div className="text-3xl font-bold text-emerald-500">
               {formatCurrency(orderMetrics.aov3)}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
@@ -204,7 +204,7 @@ export function OrderMetricsComponent({ orderMetrics }: OrderMetricsProps) {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-violet-500">
+            <div className="text-3xl font-bold text-violet-500">
               {formatCurrency(orderMetrics.aov4)}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
@@ -221,7 +221,7 @@ export function OrderMetricsComponent({ orderMetrics }: OrderMetricsProps) {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-rose-500">
+            <div className="text-3xl font-bold text-rose-500">
               {formatCurrency(orderMetrics.aov5)}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
@@ -242,7 +242,7 @@ export function OrderMetricsComponent({ orderMetrics }: OrderMetricsProps) {
           </CardHeader>
           <CardContent>
             <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold text-orange-500">
+              <span className="text-3xl font-bold text-orange-500">
                 {orderMetrics.dropoff1to2.toFixed(1)}%
               </span>
               <span className="text-sm text-muted-foreground">
@@ -270,7 +270,7 @@ export function OrderMetricsComponent({ orderMetrics }: OrderMetricsProps) {
           </CardHeader>
           <CardContent>
             <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold text-orange-500">
+              <span className="text-3xl font-bold text-orange-500">
                 {orderMetrics.dropoff2to3.toFixed(1)}%
               </span>
               <span className="text-sm text-muted-foreground">
@@ -298,7 +298,7 @@ export function OrderMetricsComponent({ orderMetrics }: OrderMetricsProps) {
           </CardHeader>
           <CardContent>
             <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold text-orange-500">
+              <span className="text-3xl font-bold text-orange-500">
                 {orderMetrics.dropoff3to4.toFixed(1)}%
               </span>
               <span className="text-sm text-muted-foreground">
@@ -326,7 +326,7 @@ export function OrderMetricsComponent({ orderMetrics }: OrderMetricsProps) {
           </CardHeader>
           <CardContent>
             <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold text-orange-500">
+              <span className="text-3xl font-bold text-orange-500">
                 {orderMetrics.dropoff4to5.toFixed(1)}%
               </span>
               <span className="text-sm text-muted-foreground">
