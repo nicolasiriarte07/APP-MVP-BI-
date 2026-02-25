@@ -142,15 +142,15 @@ export function SegmentContext({ segments }: SegmentContextProps) {
                   </p>
 
                   {/* Behavior */}
-                  <div className="rounded-lg bg-gray-50 p-3 border border-gray-200">
-                    <p className="text-xs font-medium text-gray-500 mb-1">Comportamiento</p>
-                    <p className="text-sm text-gray-700">{info.behavior}</p>
+                  <div className="rounded-lg bg-slate-800 p-3">
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1.5">Comportamiento</p>
+                    <p className="text-sm text-slate-100 leading-relaxed">{info.behavior}</p>
                   </div>
 
                   {/* Action */}
-                  <div className="rounded-lg bg-blue-50 p-3 border border-blue-200">
-                    <p className="text-xs font-medium text-blue-600 mb-1">Recomendación</p>
-                    <p className="text-sm text-gray-700">{info.action}</p>
+                  <div className="rounded-lg bg-blue-600 p-3">
+                    <p className="text-xs font-bold text-blue-200 uppercase tracking-widest mb-1.5">Recomendación</p>
+                    <p className="text-sm text-white font-medium leading-relaxed">{info.action}</p>
                   </div>
                 </div>
               </CardContent>
