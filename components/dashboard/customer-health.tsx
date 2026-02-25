@@ -100,39 +100,39 @@ export function CustomerHealth({ analysis }: CustomerHealthProps) {
       <div className="space-y-6">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           {/* Active Card */}
-          <div className="relative rounded-lg border-l-4 border-emerald-500 bg-emerald-500/5 p-6">
+          <div className="relative rounded-lg border-l-4 border-emerald-500 bg-emerald-50 p-6">
             <div className="text-3xl mb-2">🟢</div>
-            <div className="text-4xl font-bold text-emerald-400 mb-1">
+            <div className="text-4xl font-bold text-emerald-700 mb-1">
               {formatNumber(activeCustomers.length)}
             </div>
-            <div className="text-lg text-emerald-300 mb-4">{activePercentage.toFixed(0)}% Activos</div>
-            <div className="text-sm text-emerald-200 mb-1">Revenue histórico</div>
-            <div className="text-2xl font-bold text-emerald-400">{formatCurrency(activeRevenue)}</div>
+            <div className="text-lg text-emerald-700 mb-4">{activePercentage.toFixed(0)}% Activos</div>
+            <div className="text-sm text-emerald-600 mb-1">Revenue histórico</div>
+            <div className="text-2xl font-bold text-emerald-700">{formatCurrency(activeRevenue)}</div>
           </div>
 
           {/* Dormant Card */}
-          <div className="relative rounded-lg border-l-4 border-amber-500 bg-amber-500/5 p-6">
+          <div className="relative rounded-lg border-l-4 border-amber-500 bg-amber-50 p-6">
             <div className="text-3xl mb-2">💤</div>
-            <div className="text-4xl font-bold text-amber-400 mb-1">
+            <div className="text-4xl font-bold text-amber-700 mb-1">
               {formatNumber(dormantCustomers.length)}
             </div>
-            <div className="text-lg text-amber-300 mb-4">{dormantPercentage.toFixed(0)}% Dormidos</div>
-            <div className="text-sm text-amber-200 mb-1">Revenue histórico</div>
-            <div className="text-2xl font-bold text-amber-400">{formatCurrency(dormantRevenue)}</div>
+            <div className="text-lg text-amber-700 mb-4">{dormantPercentage.toFixed(0)}% Dormidos</div>
+            <div className="text-sm text-amber-600 mb-1">Revenue histórico</div>
+            <div className="text-2xl font-bold text-amber-700">{formatCurrency(dormantRevenue)}</div>
           </div>
         </div>
       </div>
 
       {/* Insight Box */}
-      <div className="rounded-lg border-borderblue-500/30 bg-blue-500/5 p-4">
+      <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
         <div className="flex gap-3">
           <span className="text-xl">💡</span>
-          <div className="flex-1 text-sm text-blue-100 space-y-2">
+          <div className="flex-1 text-sm text-blue-800 space-y-2">
             <p>
-              Tu tasa de dormancia ({dormantPercentage.toFixed(0)}%) está por encima del promedio de la industria. 
+              Tu tasa de dormancia ({dormantPercentage.toFixed(0)}%) está por encima del promedio de la industria.
               Si recuperas el 20% de dormidos ({Math.round(dormantCustomers.length * 0.2)} clientes):
             </p>
-            <p className="font-semibold text-blue-300">
+            <p className="font-semibold text-blue-700">
               → +${formatNumber(dormantRevenue * 0.2 / 12)}/mes en revenue adicional
             </p>
           </div>
@@ -163,15 +163,15 @@ export function CustomerHealth({ analysis }: CustomerHealthProps) {
                   CSV
                 </Button>
               </div>
-              <div className="h-2 bg-emerald-900/30 rounded-full overflow-hidden">
-                <div 
+              <div className="h-2 bg-emerald-100 rounded-full overflow-hidden">
+                <div
                   className="h-full bg-emerald-600 rounded-full transition-all duration-800"
                   style={{ width: `${(champions.length / activeCustomers.length) * 100}%` }}
                 />
               </div>
               <div className="flex justify-between text-xs text-muted-foreground">
                 <span>{((champions.length / activeCustomers.length) * 100).toFixed(0)}% • {formatNumber(champions.length)} clientes</span>
-                <span className="text-emerald-400 font-semibold">{formatCurrency(getRevenue(champions))} • LTV ${formatNumber(champions.length > 0 ? getRevenue(champions) / champions.length : 0)}</span>
+                <span className="text-emerald-600 font-semibold">{formatCurrency(getRevenue(champions))} • LTV ${formatNumber(champions.length > 0 ? getRevenue(champions) / champions.length : 0)}</span>
               </div>
             </div>
 
@@ -193,15 +193,15 @@ export function CustomerHealth({ analysis }: CustomerHealthProps) {
                   CSV
                 </Button>
               </div>
-              <div className="h-2 bg-amber-900/30 rounded-full overflow-hidden">
-                <div 
+              <div className="h-2 bg-amber-100 rounded-full overflow-hidden">
+                <div
                   className="h-full bg-amber-500 rounded-full transition-all duration-800"
                   style={{ width: `${(atRisk.length / activeCustomers.length) * 100}%` }}
                 />
               </div>
               <div className="flex justify-between text-xs text-muted-foreground">
                 <span>{((atRisk.length / activeCustomers.length) * 100).toFixed(0)}% • {formatNumber(atRisk.length)} clientes</span>
-                <span className="text-amber-400 font-semibold">{formatCurrency(getRevenue(atRisk))} • 60-90 días sin comprar</span>
+                <span className="text-amber-600 font-semibold">{formatCurrency(getRevenue(atRisk))} • 60-90 días sin comprar</span>
               </div>
             </div>
 
@@ -223,30 +223,30 @@ export function CustomerHealth({ analysis }: CustomerHealthProps) {
                   CSV
                 </Button>
               </div>
-              <div className="h-2 bg-blue-900/30 rounded-full overflow-hidden">
-                <div 
+              <div className="h-2 bg-blue-100 rounded-full overflow-hidden">
+                <div
                   className="h-full bg-blue-500 rounded-full transition-all duration-800"
                   style={{ width: `${(regular.length / activeCustomers.length) * 100}%` }}
                 />
               </div>
               <div className="flex justify-between text-xs text-muted-foreground">
                 <span>{((regular.length / activeCustomers.length) * 100).toFixed(0)}% • {formatNumber(regular.length)} clientes</span>
-                <span className="text-blue-400 font-semibold">{formatCurrency(getRevenue(regular))} • En ciclo normal</span>
+                <span className="text-blue-600 font-semibold">{formatCurrency(getRevenue(regular))} • En ciclo normal</span>
               </div>
             </div>
 
             {/* Alert for At Risk */}
             {atRisk.length > 0 && (
-              <div className="rounded-lg border-borderamber-500/30 bg-amber-500/5 p-4 mt-4">
+              <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 mt-4">
                 <div className="space-y-2">
-                  <div className="flex gap-2 text-sm text-amber-100">
+                  <div className="flex gap-2 text-sm text-amber-800">
                     <AlertCircle className="h-5 w-5 flex-shrink-0" />
                     <p>
-                      <strong>{formatNumber(atRisk.length)} clientes en riesgo</strong> están a punto de volverse dormidos. 
+                      <strong>{formatNumber(atRisk.length)} clientes en riesgo</strong> están a punto de volverse dormidos.
                       Actúa en los próximos 15-45 días para retenerlos.
                     </p>
                   </div>
-                  <div className="text-xs text-amber-200 ml-7 space-y-1">
+                  <div className="text-xs text-amber-700 ml-7 space-y-1">
                     <p>Para crecer necesitas:</p>
                     <p>• Reducir churn de {formatNumber(monthlyChurnCount)} a ~{formatNumber(Math.round(monthlyChurnCount * 0.7))}/mes (-30%), O</p>
                     <p>• Aumentar reactivaciones de {formatNumber(monthlyReactivations)} a ~{formatNumber(Math.round(monthlyReactivations * 2))}/mes</p>
@@ -282,15 +282,15 @@ export function CustomerHealth({ analysis }: CustomerHealthProps) {
                   CSV
                 </Button>
               </div>
-              <div className="h-2 bg-orange-900/30 rounded-full overflow-hidden">
-                <div 
+              <div className="h-2 bg-orange-100 rounded-full overflow-hidden">
+                <div
                   className="h-full bg-orange-500 rounded-full transition-all duration-800"
                   style={{ width: `${dormantCustomers.length > 0 ? (recoverable.length / dormantCustomers.length) * 100 : 0}%` }}
                 />
               </div>
               <div className="flex justify-between text-xs text-muted-foreground">
                 <span>{dormantCustomers.length > 0 ? ((recoverable.length / dormantCustomers.length) * 100).toFixed(0) : 0}% • {formatNumber(recoverable.length)} clientes</span>
-                <span className="text-orange-400 font-semibold">{formatCurrency(dormantRevenue * (dormantCustomers.length > 0 ? recoverable.length / dormantCustomers.length : 0))} histórico • ROI 15-25%</span>
+                <span className="text-orange-600 font-semibold">{formatCurrency(dormantRevenue * (dormantCustomers.length > 0 ? recoverable.length / dormantCustomers.length : 0))} histórico • ROI 15-25%</span>
               </div>
             </div>
 
@@ -312,24 +312,24 @@ export function CustomerHealth({ analysis }: CustomerHealthProps) {
                   CSV
                 </Button>
               </div>
-              <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-gray-500 rounded-full transition-all duration-800"
+              <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gray-400 rounded-full transition-all duration-800"
                   style={{ width: `${dormantCustomers.length > 0 ? (lost.length / dormantCustomers.length) * 100 : 0}%` }}
                 />
               </div>
               <div className="flex justify-between text-xs text-muted-foreground">
                 <span>{dormantCustomers.length > 0 ? ((lost.length / dormantCustomers.length) * 100).toFixed(0) : 0}% • {formatNumber(lost.length)} clientes</span>
-                <span className="text-gray-400 font-semibold">{formatCurrency(dormantRevenue * (dormantCustomers.length > 0 ? lost.length / dormantCustomers.length : 0))} histórico • Bajo ROI</span>
+                <span className="text-gray-600 font-semibold">{formatCurrency(dormantRevenue * (dormantCustomers.length > 0 ? lost.length / dormantCustomers.length : 0))} histórico • Bajo ROI</span>
               </div>
             </div>
 
             {/* Alert for churn flow */}
-            <div className="rounded-lg border-borderred-500/30 bg-red-500/5 p-4 mt-4">
-              <div className="flex gap-2 text-xs text-red-100">
+            <div className="rounded-lg border border-red-200 bg-red-50 p-4 mt-4">
+              <div className="flex gap-2 text-xs text-red-800">
                 <AlertCircle className="h-4 w-4 flex-shrink-0 mt-0.5" />
                 <p>
-                  Aproximadamente <strong>{Math.round((atRisk.length * churnRate) / 12)}</strong> clientes pasan a "Dormidos" cada mes. 
+                  Aproximadamente <strong>{Math.round((atRisk.length * churnRate) / 12)}</strong> clientes pasan a "Dormidos" cada mes.
                   Si no reduces este flujo, en 6 meses tendrás {dormantPercentage.toFixed(0) + 5}% de dormancia.
                 </p>
               </div>
@@ -372,15 +372,15 @@ export function CustomerHealth({ analysis }: CustomerHealthProps) {
 
               <div className="p-3 rounded-lg bg-background">
                 <div className="text-xs text-muted-foreground mb-1">Si baja al promedio (1.2%)</div>
-                <div className="font-semibold text-emerald-400">Retienes {formatNumber(monthlyChurnCount - Math.round(activeCustomers.length * benchmarkChurn))} clientes/mes adicionales</div>
+                <div className="font-semibold text-emerald-600">Retienes {formatNumber(monthlyChurnCount - Math.round(activeCustomers.length * benchmarkChurn))} clientes/mes adicionales</div>
               </div>
 
               <div className="p-3 rounded-lg bg-background">
                 <div className="text-xs text-muted-foreground mb-1">Proyección 12 meses</div>
                 <div className="text-sm space-y-1">
-                  <div>Con churn actual: <span className="font-semibold text-red-400">-{formatNumber(monthlyChurnCount * 12)}</span> clientes</div>
-                  <div>Con churn objetivo: <span className="font-semibold text-emerald-400">-{formatNumber(Math.round(activeCustomers.length * benchmarkChurn) * 12)}</span> clientes</div>
-                  <div>Diferencia: <span className="font-semibold text-emerald-400">{formatNumber((monthlyChurnCount - Math.round(activeCustomers.length * benchmarkChurn)) * 12)}</span> clientes salvados</div>
+                  <div>Con churn actual: <span className="font-semibold text-red-600">-{formatNumber(monthlyChurnCount * 12)}</span> clientes</div>
+                  <div>Con churn objetivo: <span className="font-semibold text-emerald-600">-{formatNumber(Math.round(activeCustomers.length * benchmarkChurn) * 12)}</span> clientes</div>
+                  <div>Diferencia: <span className="font-semibold text-emerald-600">{formatNumber((monthlyChurnCount - Math.round(activeCustomers.length * benchmarkChurn)) * 12)}</span> clientes salvados</div>
                 </div>
               </div>
             </div>
@@ -401,11 +401,11 @@ export function CustomerHealth({ analysis }: CustomerHealthProps) {
                 <div className="flex items-center justify-between">
                   <div className="space-y-1">
                     <div className="text-sm text-muted-foreground">Nuevos</div>
-                    <div className="text-2xl font-bold text-emerald-400">+120</div>
+                    <div className="text-2xl font-bold text-emerald-700">+120</div>
                   </div>
                   <div className="text-right space-y-1">
                     <div className="text-sm text-muted-foreground">Primera compra</div>
-                    <div className="text-lg font-semibold text-emerald-300">{formatCurrency(120 * (activeRevenue / activeCustomers.length * 0.4))}</div>
+                    <div className="text-lg font-semibold text-emerald-600">{formatCurrency(120 * (activeRevenue / activeCustomers.length * 0.4))}</div>
                   </div>
                 </div>
               </CardContent>
@@ -417,16 +417,16 @@ export function CustomerHealth({ analysis }: CustomerHealthProps) {
             </div>
 
             {/* Active */}
-            <Card className="bg-blue-500/5 border-2 border-blue-500/50">
+            <Card className="bg-blue-50 border-2 border-blue-300">
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div className="space-y-1">
                     <div className="text-sm text-muted-foreground">Activos</div>
-                    <div className="text-3xl font-bold text-blue-400">{formatNumber(activeCustomers.length)}</div>
+                    <div className="text-3xl font-bold text-blue-700">{formatNumber(activeCustomers.length)}</div>
                   </div>
                   <div className="text-right space-y-1">
                     <div className="text-sm text-muted-foreground">En ciclo</div>
-                    <div className="text-2xl font-semibold text-blue-300">{formatCurrency(activeRevenue)}</div>
+                    <div className="text-2xl font-semibold text-blue-600">{formatCurrency(activeRevenue)}</div>
                   </div>
                 </div>
               </CardContent>
@@ -434,13 +434,13 @@ export function CustomerHealth({ analysis }: CustomerHealthProps) {
 
             {/* Flow indicators */}
             <div className="grid grid-cols-2 gap-2">
-              <div className="flex justify-end text-red-400 text-sm font-semibold">
+              <div className="flex justify-end text-red-600 text-sm font-semibold">
                 -{formatNumber(monthlyChurnCount)} ↓<br/>
-                <span className="text-xs text-red-300">(churn)</span>
+                <span className="text-xs text-red-500">(churn)</span>
               </div>
-              <div className="flex justify-start text-emerald-400 text-sm font-semibold">
+              <div className="flex justify-start text-emerald-600 text-sm font-semibold">
                 ↑ +{formatNumber(monthlyReactivations)}<br/>
-                <span className="text-xs text-emerald-300">(reactivados)</span>
+                <span className="text-xs text-emerald-500">(reactivados)</span>
               </div>
             </div>
 
@@ -450,16 +450,16 @@ export function CustomerHealth({ analysis }: CustomerHealthProps) {
             </div>
 
             {/* Dormant */}
-            <Card className="bg-gray-500/5 border-bordergray-500/30">
+            <Card className="bg-gray-100 border border-gray-300">
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div className="space-y-1">
                     <div className="text-sm text-muted-foreground">Dormidos</div>
-                    <div className="text-2xl font-bold text-gray-400">{formatNumber(dormantCustomers.length)}</div>
+                    <div className="text-2xl font-bold text-gray-600">{formatNumber(dormantCustomers.length)}</div>
                   </div>
                   <div className="text-right space-y-1">
                     <div className="text-sm text-muted-foreground">Fuera ciclo</div>
-                    <div className="text-lg font-semibold text-gray-400 line-through">$0</div>
+                    <div className="text-lg font-semibold text-gray-500 line-through">$0</div>
                   </div>
                 </div>
               </CardContent>
@@ -467,18 +467,18 @@ export function CustomerHealth({ analysis }: CustomerHealthProps) {
 
             {/* Alert for net change */}
             {netChange < 0 && (
-              <div className="rounded-lg border-borderamber-500/30 bg-amber-500/5 p-4">
+              <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
                 <div className="space-y-2">
-                  <div className="flex gap-2 text-sm text-amber-100">
+                  <div className="flex gap-2 text-sm text-amber-800">
                     <AlertCircle className="h-5 w-5 flex-shrink-0" />
                     <p>
-                      <strong>Problema detectado:</strong> El churn ({formatNumber(monthlyChurnCount)}/mes) es mayor que 
-                      las reactivaciones ({formatNumber(monthlyReactivations)}/mes). 
+                      <strong>Problema detectado:</strong> El churn ({formatNumber(monthlyChurnCount)}/mes) es mayor que
+                      las reactivaciones ({formatNumber(monthlyReactivations)}/mes).
                       <br />
                       <strong>Net: {netChange}/mes en clientes activos.</strong>
                     </p>
                   </div>
-                  <div className="text-xs text-amber-200 ml-7 space-y-1">
+                  <div className="text-xs text-amber-700 ml-7 space-y-1">
                     <p>Para crecer necesitas:</p>
                     <p>• Reducir churn de {formatNumber(monthlyChurnCount)} a ~{formatNumber(Math.round(monthlyChurnCount * 0.7))}/mes (-30%), O</p>
                     <p>• Aumentar reactivaciones de {formatNumber(monthlyReactivations)} a ~{formatNumber(Math.round(monthlyReactivations * 2))}/mes</p>
