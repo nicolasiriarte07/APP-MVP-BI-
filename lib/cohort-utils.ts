@@ -88,6 +88,12 @@ const PRODUCT_KEYS = [
   'Nombre del producto', 'nombre_producto', 'Productos',
 ]
 
+const ORDER_ID_KEYS = [
+  'order_id', 'orderId', 'order_number', 'orderNumber', 'id', 'ID',
+  'numero_orden', 'numero_pedido', 'Número de pedido', 'pedido', 'Pedido',
+  'order', 'Order', 'Número de orden', 'numero de orden',
+]
+
 // Prefix patterns used as fallback when exact key matching fails
 const AMOUNT_PREFIXES = ['Importe total', 'importe total', 'Total (', 'total (']
 
@@ -108,13 +114,14 @@ function findKeyByPrefix(row: Record<string, unknown>, prefixes: string[]): stri
 }
 
 function resolveKeys(rows: Record<string, unknown>[]) {
-  if (rows.length === 0) return { emailKey: null, dateKey: null, amountKey: null, productKey: null }
+  if (rows.length === 0) return { emailKey: null, dateKey: null, amountKey: null, productKey: null, orderIdKey: null }
   const sample = rows[0]
   return {
     emailKey: findKey(sample, EMAIL_KEYS),
     dateKey: findKey(sample, DATE_KEYS),
     amountKey: findKey(sample, AMOUNT_KEYS) ?? findKeyByPrefix(sample, AMOUNT_PREFIXES),
     productKey: findKey(sample, PRODUCT_KEYS),
+    orderIdKey: findKey(sample, ORDER_ID_KEYS),
   }
 }
 
@@ -714,7 +721,7 @@ export function processExcelData(
     return { analysis: null, errors: ['El archivo está vacío'] }
   }
 
-  const { emailKey, dateKey, amountKey, productKey } = resolveKeys(rawData)
+  const { emailKey, dateKey, amountKey, productKey, orderIdKey } = resolveKeys(rawData)
 
   if (!emailKey) {
     errors.push('No se encontró columna de email. Columnas esperadas: email, correo, customer_email')
@@ -730,8 +737,12 @@ export function processExcelData(
     return { analysis: null, errors }
   }
 
-  // Group rows by customer email
-  const customerMap = new Map<string, Array<{ date: Date; amount: number; products: string[] }>>()
+  // Pass 1: group CSV rows into orders, merging products from multiple rows of the same order.
+  // Key is (email + orderId) when available, otherwise (email + timestamp + amount).
+  // This is necessary because CSVs often have one row per line-item, so a single order with
+  // multiple products would otherwise create separate single-product purchases, making
+  // product_duos / product_trios always empty.
+  const orderMap = new Map<string, { email: string; date: Date; amount: number; products: Set<string> }>()
 
   for (const row of rawData) {
     const email = String(row[emailKey] ?? '').trim().toLowerCase()
@@ -744,10 +755,30 @@ export function processExcelData(
     if (amount <= 0) continue
 
     const product = productKey ? String(row[productKey] ?? '').trim() : ''
-    const products = product ? [product] : []
+    const orderId = orderIdKey ? String(row[orderIdKey] ?? '').trim() : ''
 
-    if (!customerMap.has(email)) customerMap.set(email, [])
-    customerMap.get(email)!.push({ date, amount, products })
+    const orderKey = orderId
+      ? `${email}|||${orderId}`
+      : `${email}|||${date.getTime()}|||${amount}`
+
+    if (!orderMap.has(orderKey)) {
+      orderMap.set(orderKey, { email, date, amount, products: new Set() })
+    }
+    if (product) {
+      orderMap.get(orderKey)!.products.add(product)
+    }
+  }
+
+  // Pass 2: group orders by customer email
+  const customerMap = new Map<string, Array<{ date: Date; amount: number; products: string[] }>>()
+
+  for (const order of orderMap.values()) {
+    if (!customerMap.has(order.email)) customerMap.set(order.email, [])
+    customerMap.get(order.email)!.push({
+      date: order.date,
+      amount: order.amount,
+      products: Array.from(order.products),
+    })
   }
 
   if (customerMap.size === 0) {
