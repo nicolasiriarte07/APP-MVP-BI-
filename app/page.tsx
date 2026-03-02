@@ -13,6 +13,7 @@ import { PatientRow } from "@/components/ui/patient-row";
 import { DiagnosisCard } from "@/components/ui/diagnosis-card";
 import { AIChat } from "@/components/ui/ai-chat";
 import { Stepper } from "@/components/ui/stepper";
+import { ImportDialog } from "@/components/data-import/import-dialog";
 import {
   Activity,
   Users,
@@ -27,6 +28,7 @@ import {
   Brain,
   ChevronRight,
   Plus,
+  Upload,
 } from "lucide-react";
 
 const NAV_ITEMS = [
@@ -64,6 +66,7 @@ const STEPPER_STEPS = [
 
 export default function DashboardPage() {
   const [activeSection, setActiveSection] = useState("overview");
+  const [importOpen, setImportOpen] = useState(false);
 
   return (
     <div className="flex min-h-screen" style={{ background: "var(--bg-body)" }}>
@@ -130,10 +133,21 @@ export default function DashboardPage() {
               <Bell size={18} />
               <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[var(--error)] rounded-full" />
             </button>
+            <Button variant="outline" size="sm" onClick={() => setImportOpen(true)}>
+              <Upload size={14} />
+              Importar datos
+            </Button>
             <Button variant="primary" size="sm">
               <Plus size={14} />
               Add new visit
             </Button>
+            <ImportDialog
+              open={importOpen}
+              onClose={() => setImportOpen(false)}
+              onImport={(rows, mapping) => {
+                console.log("Imported", rows.length, "rows with mapping:", mapping);
+              }}
+            />
           </div>
         </div>
 
