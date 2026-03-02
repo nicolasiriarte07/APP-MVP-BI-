@@ -17,8 +17,10 @@ export function isSupportedFile(file: File): boolean {
 
 export async function parseFile(file: File): Promise<ParsedFile> {
   const arrayBuffer = await file.arrayBuffer();
+  // xlsx type:"array" expects Uint8Array, not ArrayBuffer
+  const data = new Uint8Array(arrayBuffer);
 
-  const workbook = XLSX.read(arrayBuffer, {
+  const workbook = XLSX.read(data, {
     type: "array",
     cellDates: true,
     cellNF: false,
