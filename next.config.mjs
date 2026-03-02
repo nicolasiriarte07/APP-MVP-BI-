@@ -6,8 +6,17 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  // xlsx uses Node.js built-ins (fs, path, crypto) that don't exist in the browser.
-  // This config tells the bundler to replace them with empty stubs.
+  // Turbopack (Next.js 15+): top-level key, NOT under experimental
+  turbopack: {
+    resolveAlias: {
+      fs: "./lib/empty.js",
+      path: "./lib/empty.js",
+      crypto: "./lib/empty.js",
+      stream: "./lib/empty.js",
+      buffer: "./lib/empty.js",
+    },
+  },
+  // Webpack fallback (used when Turbopack is disabled)
   webpack: (config) => {
     config.resolve.fallback = {
       ...config.resolve.fallback,
@@ -18,17 +27,6 @@ const nextConfig = {
       buffer: false,
     };
     return config;
-  },
-  experimental: {
-    turbo: {
-      resolveAlias: {
-        fs: { browser: "./lib/empty.js" },
-        path: { browser: "./lib/empty.js" },
-        crypto: { browser: "./lib/empty.js" },
-        stream: { browser: "./lib/empty.js" },
-        buffer: { browser: "./lib/empty.js" },
-      },
-    },
   },
 };
 
