@@ -39,7 +39,7 @@ export function TicketDriversTable({ drivers }: Props) {
             </thead>
             <tbody>
               {drivers.map((driver) => (
-                <tr key={driver.product_name} className="border-b border/20 hover:bg-background/40">
+                <tr key={driver.product_name} className="border-b border-border/20 hover:bg-background/40">
                   <td className="py-3 px-4">
                     <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-accent/10 text-accent font-semibold text-xs">
                       {driver.rank}

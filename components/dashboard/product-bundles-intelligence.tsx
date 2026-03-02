@@ -30,7 +30,7 @@ export function BundlesIntelligence({ duos, trios }: Props) {
                 </thead>
                 <tbody>
                   {duos.map((duo, idx) => (
-                    <tr key={idx} className="border-b border/20 hover:bg-background/40">
+                    <tr key={idx} className="border-b border-border/20 hover:bg-background/40">
                       <td className="py-3 px-3 text-foreground text-xs">{duo.products[0]}</td>
                       <td className="py-3 px-3 text-foreground text-xs">{duo.products[1]}</td>
                       <td className="py-3 px-3 text-right">
@@ -67,7 +67,7 @@ export function BundlesIntelligence({ duos, trios }: Props) {
                 </thead>
                 <tbody>
                   {trios.map((trio, idx) => (
-                    <tr key={idx} className="border-b border/20 hover:bg-background/40">
+                    <tr key={idx} className="border-b border-border/20 hover:bg-background/40">
                       <td className="py-3 px-3 text-foreground text-xs">
                         <div className="space-y-0.5">
                           {trio.products.map((product, i) => (

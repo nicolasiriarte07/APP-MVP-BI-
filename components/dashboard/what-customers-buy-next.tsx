@@ -36,7 +36,7 @@ export function WhatCustomersBuyNext({ topNextPurchases }: WhatCustomersBuyNextP
             </thead>
             <tbody>
               {topNextPurchases.map((item, idx) => (
-                <tr key={idx} className="border-b border/20 hover:bg-accent/5">
+                <tr key={idx} className="border-b border-border/20 hover:bg-accent/5">
                   <td className="py-3 px-4">
                     <span className="font-medium text-foreground">{item.origin_product}</span>
                   </td>

@@ -148,7 +148,7 @@ export function SegmentContext({ segments }: SegmentContextProps) {
                   </div>
 
                   {/* Action */}
-                  <div className="rounded-lg bg-accent/5 p-3 border-borderaccent/20">
+                  <div className="rounded-lg bg-accent/5 p-3 border border-accent/20">
                     <p className="text-xs font-medium text-accent mb-1">Recomendación</p>
                     <p className="text-sm text-foreground">{info.action}</p>
                   </div>

@@ -187,7 +187,7 @@ export default function HomePage() {
 
       {/* Executive Summary Line */}
       <div className="px-4 sm:px-6 lg:px-8">
-        <div className="rounded-lg bg-gradient-to-r from-background to-background/80 border-borderborder/30 px-4 py-3">
+        <div className="rounded-lg bg-gradient-to-r from-background to-background/80 border border-border/30 px-4 py-3">
           <p className="text-sm text-muted-foreground leading-relaxed">
             {atRiskSegment && (atRiskSegment.percentage_of_customers > 15 || (totalAtRiskRevenue / totalRevenue > 0.2)) ? (
               <>
@@ -222,7 +222,7 @@ export default function HomePage() {
             <CardContent className="space-y-4">
               <div className="grid gap-4 sm:grid-cols-3">
                 {/* Loyal customers insight */}
-                <div className="rounded-lg border-borderaccent/20 bg-background p-4">
+                <div className="rounded-lg border border-accent/20 bg-background p-4">
                   <p className="text-sm font-medium text-muted-foreground">Clientes Leales</p>
                   <p className="mt-2 text-xl font-bold text-accent">{loyalSegment.revenue_share.toFixed(1)}%</p>
                   <p className="mt-1 text-xs text-muted-foreground">
@@ -232,7 +232,7 @@ export default function HomePage() {
 
                 {/* At Risk alert */}
                 {atRiskSegment && atRiskSegment.percentage_of_customers > 15 && (
-                  <div className="rounded-lg border-borderwarning/20 bg-background p-4">
+                  <div className="rounded-lg border border-warning/20 bg-background p-4">
                     <p className="flex items-center gap-2 text-sm font-medium text-warning">
                       <AlertCircle className="h-4 w-4" />
                       En Riesgo
@@ -246,7 +246,7 @@ export default function HomePage() {
 
                 {/* Potential growth insight */}
                 {potentialSegment && (
-                  <div className="rounded-lg border-borderchart-2/20 bg-background p-4">
+                  <div className="rounded-lg border border-chart-2/20 bg-background p-4">
                     <p className="text-sm font-medium text-muted-foreground">Potencial de Crecimiento</p>
                     <p className="mt-2 text-xl font-bold text-chart-2">{potentialSegment.avg_revenue_per_customer.toFixed(0)}</p>
                     <p className="mt-1 text-xs text-muted-foreground">
@@ -257,7 +257,7 @@ export default function HomePage() {
               </div>
 
               {/* Strategic narrative */}
-              <div className="rounded-lg bg-background/50 p-4 text-sm text-muted-foreground border-borderborder/30">
+              <div className="rounded-lg bg-background/50 p-4 text-sm text-muted-foreground border border-border/30">
                 <p className="leading-relaxed">
                   {loyalSegment && loyalSegment.revenue_share > 50 ? (
                     <>

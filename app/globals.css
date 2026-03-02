@@ -4,24 +4,26 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: #0F1419;
-  --foreground: #FFFFFF;
-  --card: #1A1F26;
-  --card-foreground: #FFFFFF;
-  --popover: #1A1F26;
-  --popover-foreground: #FFFFFF;
+  --background: #FFFFFF;
+  --foreground: #0F1419;
+  --card: #FFFFFF;
+  --card-foreground: #0F1419;
+  --popover: #FFFFFF;
+  --popover-foreground: #0F1419;
   --primary: #01d280;
   --primary-foreground: #000000;
-  --secondary: #232931;
-  --secondary-foreground: #FFFFFF;
-  --muted: #8B98A5;
-  --muted-foreground: #B8C5D0;
+  --secondary: #F1F5F9;
+  --secondary-foreground: #0F1419;
+  --muted: #F1F5F9;
+  --muted-foreground: #64748B;
   --accent: #01d280;
   --accent-foreground: #000000;
+  --warning: #F59E0B;
+  --warning-foreground: #000000;
   --destructive: #EF4444;
   --destructive-foreground: #FFFFFF;
-  --border: #2A3038;
-  --input: #232931;
+  --border: #E2E8F0;
+  --input: #F8FAFC;
   --ring: #01d280;
   --chart-1: #01d280;
   --chart-2: #3B82F6;
@@ -29,13 +31,13 @@
   --chart-4: #EF4444;
   --chart-5: #8B5CF6;
   --radius: 0.75rem;
-  --sidebar: #0F1419;
-  --sidebar-foreground: #FFFFFF;
+  --sidebar: #F8FAFC;
+  --sidebar-foreground: #0F1419;
   --sidebar-primary: #01d280;
   --sidebar-primary-foreground: #000000;
-  --sidebar-accent: #232931;
-  --sidebar-accent-foreground: #01d280;
-  --sidebar-border: #2A3038;
+  --sidebar-accent: #F1F5F9;
+  --sidebar-accent-foreground: #0F1419;
+  --sidebar-border: #E2E8F0;
   --sidebar-ring: #01d280;
 }
 
@@ -54,6 +56,8 @@
   --muted-foreground: #999999;
   --accent: #00ff88;
   --accent-foreground: #000000;
+  --warning: #FBBF24;
+  --warning-foreground: #000000;
   --destructive: #ff4444;
   --destructive-foreground: #ffffff;
   --border: #444444;
@@ -74,63 +78,43 @@
   --sidebar-ring: #00ff88;
 }
 
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
 body {
-  font-family: 'Geist', 'Geist Fallback', system-ui, sans-serif;
-}
-
-/* Custom utility classes using CSS variables */
-.border-border {
-  border-color: var(--border);
-}
-
-.bg-background {
-  background-color: var(--background);
-}
-
-.bg-card {
-  background-color: var(--card);
-}
-
-.bg-popover {
-  background-color: var(--popover);
-}
-
-.bg-input {
-  background-color: var(--input);
-}
-
-.text-foreground {
-  color: var(--foreground);
-}
-
-.text-muted-foreground {
-  color: var(--muted-foreground);
-}
-
-.text-card-foreground {
-  color: var(--card-foreground);
-}
-
-.text-primary {
-  color: var(--primary);
-}
-
-.text-accent {
-  color: var(--accent);
-}
-
-.text-destructive {
-  color: var(--destructive);
-}
-
-.bg-foreground {
-  background-color: var(--foreground);
-}
-
-.outline-ring {
-  outline-color: var(--ring);
-}
-
-.border-ring {
-  border-color: var(--ring);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
