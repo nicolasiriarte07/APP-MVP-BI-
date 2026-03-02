@@ -7,12 +7,17 @@ const badgeVariants = cva(
   {
     variants: {
       variant: {
-        primary: "bg-[var(--primary-100)] text-[var(--primary-700)]",
-        secondary: "bg-[var(--secondary-100)] text-[var(--secondary-600)]",
-        success: "bg-[#DCFCE7] text-[#166534]",
-        warning: "bg-[var(--accent-yellow)] text-[var(--accent-yellow-text)]",
-        error: "bg-[#FEE2E2] text-[#991B1B]",
-        info: "bg-[#DBEAFE] text-[#1E40AF]",
+        // Design system variants
+        primary:   "bg-primary/10 text-primary",
+        secondary: "bg-secondary text-secondary-foreground",
+        success:   "bg-[#DCFCE7] text-[#166534]",
+        warning:   "bg-yellow-100 text-yellow-800",
+        error:     "bg-[#FEE2E2] text-[#991B1B]",
+        info:      "bg-[#DBEAFE] text-[#1E40AF]",
+        // Shadcn-compatible aliases
+        default:     "border-transparent bg-primary text-primary-foreground",
+        destructive: "border-transparent bg-destructive text-white",
+        outline:     "text-foreground border border-input",
       },
     },
     defaultVariants: {
@@ -26,10 +31,10 @@ const statusPillVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-[var(--accent-yellow)] text-[var(--accent-yellow-text)]",
+        default: "bg-yellow-100 text-yellow-800",
         success: "bg-[#DCFCE7] text-[#166534]",
-        error: "bg-[#FEE2E2] text-[#991B1B]",
-        info: "bg-[var(--primary-100)] text-[var(--primary-700)]",
+        error:   "bg-[#FEE2E2] text-[#991B1B]",
+        info:    "bg-[#DBEAFE] text-[#1E40AF]",
       },
     },
     defaultVariants: {
@@ -46,6 +51,7 @@ const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
   ({ className, variant, ...props }, ref) => (
     <span
       ref={ref}
+      data-slot="badge"
       className={cn(badgeVariants({ variant }), className)}
       {...props}
     />

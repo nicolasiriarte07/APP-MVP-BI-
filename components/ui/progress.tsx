@@ -1,3 +1,5 @@
+'use client'
+
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
@@ -14,14 +16,14 @@ const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
     return (
       <div ref={ref} className={cn("w-full", className)} {...props}>
         {label && (
-          <div className="flex justify-between items-center mb-2 text-sm font-medium text-[var(--secondary-900)]">
+          <div className="flex justify-between items-center mb-2 text-sm font-medium text-foreground">
             <span>{label}</span>
             <span>{Math.round(percentage)}%</span>
           </div>
         )}
-        <div className="w-full h-6 bg-[var(--secondary-100)] rounded-full overflow-hidden">
+        <div className="w-full h-2 bg-primary/20 rounded-full overflow-hidden">
           <div
-            className="h-full bg-[var(--primary-200)] rounded-full transition-all duration-500 ease-out"
+            className="h-full bg-primary rounded-full transition-all duration-500 ease-out"
             style={{ width: `${percentage}%` }}
             role="progressbar"
             aria-valuenow={value}
@@ -35,12 +37,22 @@ const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
 );
 Progress.displayName = "Progress";
 
-const Spinner = ({ className, size = "md" }: { className?: string; size?: "sm" | "md" | "lg" }) => {
-  const sizeMap = { sm: "w-4 h-4 border-2", md: "w-8 h-8 border-3", lg: "w-12 h-12 border-4" };
+const Spinner = ({
+  className,
+  size = "md",
+}: {
+  className?: string;
+  size?: "sm" | "md" | "lg";
+}) => {
+  const sizeMap = {
+    sm: "w-4 h-4 border-2",
+    md: "w-8 h-8 border-2",
+    lg: "w-12 h-12 border-4",
+  };
   return (
     <div
       className={cn(
-        "rounded-full border-[var(--secondary-200)] border-t-[var(--primary-600)] animate-spin",
+        "rounded-full border-muted border-t-primary animate-spin",
         sizeMap[size],
         className
       )}
@@ -52,10 +64,7 @@ const Spinner = ({ className, size = "md" }: { className?: string; size?: "sm" |
 };
 
 const Skeleton = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div
-    className={cn("skeleton rounded", className)}
-    {...props}
-  />
+  <div className={cn("animate-pulse rounded bg-muted", className)} {...props} />
 );
 
 export { Progress, Spinner, Skeleton };

@@ -1,3 +1,5 @@
+'use client'
+
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
@@ -15,7 +17,7 @@ const sizeMap = {
   xl: "w-20 h-20 text-lg",
 };
 
-const Avatar = React.forwardRef<HTMLImageElement, AvatarProps>(
+const Avatar = React.forwardRef<HTMLSpanElement, AvatarProps>(
   ({ className, size = "md", square, fallback, src, alt, ...props }, ref) => {
     const [imgError, setImgError] = React.useState(false);
     const sizeClass = sizeMap[size];
@@ -23,32 +25,36 @@ const Avatar = React.forwardRef<HTMLImageElement, AvatarProps>(
 
     if (!src || imgError) {
       return (
-        <div
+        <span
+          ref={ref}
           className={cn(
-            "bg-[var(--secondary-200)] flex items-center justify-content:center object-cover",
+            "bg-muted flex items-center justify-center shrink-0 overflow-hidden",
             sizeClass,
             shapeClass,
             className
           )}
-          style={{ display: "flex", alignItems: "center", justifyContent: "center" }}
           aria-label={alt}
         >
-          <span className="font-semibold text-[var(--secondary-600)]">
+          <span className="font-semibold text-muted-foreground text-inherit">
             {fallback || alt?.slice(0, 2).toUpperCase() || "?"}
           </span>
-        </div>
+        </span>
       );
     }
 
     return (
-      <img
+      <span
         ref={ref}
-        src={src}
-        alt={alt}
-        className={cn("object-cover", sizeClass, shapeClass, className)}
-        onError={() => setImgError(true)}
-        {...props}
-      />
+        className={cn("relative inline-flex shrink-0 overflow-hidden", sizeClass, shapeClass, className)}
+      >
+        <img
+          src={src}
+          alt={alt}
+          className="object-cover w-full h-full"
+          onError={() => setImgError(true)}
+          {...(props as React.ImgHTMLAttributes<HTMLImageElement>)}
+        />
+      </span>
     );
   }
 );
@@ -79,7 +85,7 @@ const AvatarGroup = ({
       ))}
       {overflow > 0 && (
         <div
-          className="w-12 h-12 rounded-full bg-[var(--secondary-200)] flex items-center justify-center text-xs font-semibold text-[var(--secondary-600)]"
+          className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-xs font-semibold text-muted-foreground"
           style={{ marginLeft: "-10px", border: "2px solid white" }}
         >
           +{overflow}
@@ -89,4 +95,19 @@ const AvatarGroup = ({
   );
 };
 
-export { Avatar, AvatarGroup };
+// Radix-compatible primitives kept for any existing usage
+function AvatarImage({ className, ...props }: React.ImgHTMLAttributes<HTMLImageElement>) {
+  return <img data-slot="avatar-image" className={cn("aspect-square size-full object-cover", className)} {...props} />;
+}
+
+function AvatarFallback({ className, ...props }: React.HTMLAttributes<HTMLSpanElement>) {
+  return (
+    <span
+      data-slot="avatar-fallback"
+      className={cn("bg-muted flex size-full items-center justify-center rounded-full", className)}
+      {...props}
+    />
+  );
+}
+
+export { Avatar, AvatarGroup, AvatarImage, AvatarFallback };

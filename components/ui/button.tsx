@@ -8,24 +8,26 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary:
-          "bg-[var(--primary-600)] text-white hover:bg-[var(--primary-700)] active:bg-[var(--primary-800)]",
-        secondary:
-          "bg-[var(--secondary-100)] text-[var(--secondary-900)] hover:bg-[var(--secondary-200)] active:bg-[var(--secondary-300)]",
-        outline:
-          "bg-transparent border-[var(--secondary-300)] text-[var(--secondary-700)] hover:border-[var(--secondary-900)] hover:text-[var(--secondary-900)]",
-        ghost:
-          "bg-transparent text-[var(--secondary-600)] hover:bg-[var(--secondary-50)] active:bg-[var(--secondary-100)]",
-        destructive:
-          "bg-[var(--error)] text-white hover:opacity-90 active:opacity-80",
-        link: "bg-transparent text-[var(--primary-600)] underline-offset-4 hover:underline p-0 h-auto",
+        // Design system variants
+        primary:     "bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/80",
+        secondary:   "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        outline:     "bg-transparent border-input text-foreground hover:bg-accent hover:text-accent-foreground",
+        ghost:       "bg-transparent text-foreground hover:bg-accent hover:text-accent-foreground",
+        destructive: "bg-destructive text-white hover:bg-destructive/90",
+        link:        "bg-transparent text-primary underline-offset-4 hover:underline p-0 h-auto border-0",
+        // Shadcn-compatible alias
+        default:     "bg-primary text-primary-foreground hover:bg-primary/90",
       },
       size: {
-        sm: "px-4 py-2 text-xs rounded-[var(--radius-sm)]",
-        md: "px-6 py-3 text-sm rounded-[var(--radius-md)]",
-        lg: "px-8 py-4 text-base rounded-[var(--radius-md)]",
-        icon: "w-10 h-10 rounded-full p-0",
+        // Design system sizes
+        sm:      "px-4 py-2 text-xs rounded-md",
+        md:      "px-6 py-3 text-sm rounded-md",
+        lg:      "px-8 py-4 text-base rounded-md",
+        icon:    "w-10 h-10 rounded-full p-0",
         "icon-sm": "w-8 h-8 rounded-full p-0 text-xs",
+        // Shadcn-compatible aliases
+        default: "px-6 py-3 text-sm rounded-md",
+        "icon-lg": "w-12 h-12 rounded-full p-0",
       },
     },
     defaultVariants: {
