@@ -61,7 +61,11 @@ export default function ImportPage() {
       const result = processExcelData(data, { observationWindow: 12 })
 
       if (!result.analysis) {
-        throw new Error('No se pudo procesar el análisis de los datos')
+        const errorMsg =
+          result.errors.length > 0
+            ? result.errors.join('. ')
+            : 'No se pudo procesar el análisis de los datos'
+        throw new Error(errorMsg)
       }
 
       // Add selected industry to analysis
