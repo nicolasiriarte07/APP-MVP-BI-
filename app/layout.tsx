@@ -9,8 +9,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Nexo",
-  description: "Importá tus datos y comenzá el análisis de recompra",
+  title: "BI Platform",
+  description: "Plataforma de análisis e inteligencia de negocios",
 };
 
 export default function RootLayout({
