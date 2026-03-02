@@ -4,7 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  /* Primary - Medical Teal */
+  /* Primary */
   --color-primary-50: #f0fdfa;
   --color-primary-100: #ccfbf1;
   --color-primary-200: #99f6e4;

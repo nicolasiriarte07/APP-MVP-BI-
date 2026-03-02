@@ -9,8 +9,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Medical System",
-  description: "Medical App powered by the Untitled Design System",
+  title: "BI Platform",
+  description: "Plataforma de análisis e inteligencia de negocios",
 };
 
 export default function RootLayout({
