@@ -8,9 +8,9 @@ import {
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  DollarSign, ShoppingCart, Users, Package,
+  DollarSign, ShoppingCart, Users,
   TrendingUp, TrendingDown, CreditCard, Calendar,
-  RotateCcw, ShoppingBag, Box,
+  ShoppingBag, Box, Download,
 } from "lucide-react";
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
@@ -283,6 +283,8 @@ export function MHDashboard({ rows, onReset }: MHDashboardProps) {
   const [currency,    setCurrency]    = useState<"ARS" | "USD">("ARS");
   const [viewMode,    setViewMode]    = useState<"facturacion" | "ventas">("facturacion");
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showTable,   setShowTable]   = useState(false);
+  const [tableSearch, setTableSearch] = useState("");
 
   useEffect(() => {
     if (minDate && !filterStart) setFilterStart(minDate);
@@ -309,10 +311,38 @@ export function MHDashboard({ rows, onReset }: MHDashboardProps) {
     });
   }
 
+  // ── Date presets ───────────────────────────────────────────────────────────
+
+  function applyPreset(preset: string) {
+    const max = maxDate ? new Date(maxDate) : new Date();
+    const fmt = (d: Date) => d.toISOString().split("T")[0];
+    let start: Date;
+    switch (preset) {
+      case "7d":
+        start = new Date(max); start.setDate(start.getDate() - 6); break;
+      case "30d":
+        start = new Date(max); start.setDate(start.getDate() - 29); break;
+      case "mes":
+        start = new Date(max.getFullYear(), max.getMonth(), 1); break;
+      case "3m":
+        start = new Date(max); start.setMonth(start.getMonth() - 3); break;
+      case "año":
+        start = new Date(max.getFullYear(), 0, 1); break;
+      default: // todo
+        setFilterStart(minDate); setFilterEnd(maxDate); setShowDatePicker(false); return;
+    }
+    setFilterStart(fmt(start));
+    setFilterEnd(fmt(max));
+    setShowDatePicker(false);
+  }
+
   // ── Current period data ────────────────────────────────────────────────────
 
   const currentAll  = useMemo(() => filterByRange(allParsed, filterStart, filterEnd), [allParsed, filterStart, filterEnd]);
   const currentData = useMemo(() => onlyVentas(currentAll), [currentAll]);
+
+  // activeData respects the viewMode: facturacion = all, ventas = sin notas de crédito
+  const activeData  = useMemo(() => viewMode === "facturacion" ? currentAll : currentData, [viewMode, currentAll, currentData]);
 
   // ── Previous period data (same duration, immediately before) ──────────────
 
@@ -324,8 +354,27 @@ export function MHDashboard({ rows, onReset }: MHDashboardProps) {
     const prevEnd   = new Date(s.getTime() - 1);
     const prevStart = new Date(prevEnd.getTime() - durMs);
     const fmtIso = (d: Date) => d.toISOString().split("T")[0];
-    return onlyVentas(filterByRange(allParsed, fmtIso(prevStart), fmtIso(prevEnd)));
-  }, [allParsed, filterStart, filterEnd]);
+    const base = filterByRange(allParsed, fmtIso(prevStart), fmtIso(prevEnd));
+    return viewMode === "facturacion" ? base : onlyVentas(base);
+  }, [allParsed, filterStart, filterEnd, viewMode]);
+
+  // ── Export CSV ─────────────────────────────────────────────────────────────
+
+  function exportCSV() {
+    const headers = ["Nombre_PDF","Tipo_Comprobante","Fecha","Cliente","Forma_Pago","Articulo","Descripcion","Categoria","Cantidad","IVA_Monto","Subtotal_con_IVA","Monto_con_IVA_ars","Monto_con_IVA_usd","Vertical"];
+    const escape = (v: string) => `"${(v ?? "").replace(/"/g, '""')}"`;
+    const fmtDate = (d: Date | null) => d ? `${String(d.getDate()).padStart(2,"0")}/${String(d.getMonth()+1).padStart(2,"0")}/${d.getFullYear()}` : "";
+    const rows = activeData.map((r) => [
+      r.nombre, r.tipo, fmtDate(r.fecha), r.cliente, r.formaPago,
+      r.articulo, r.descripcion, r.categoria, String(r.cantidad),
+      String(r.ivaMonto), String(r.subtotal), String(r.montoArs), String(r.montoUsd), r.vertical,
+    ].map(escape).join(","));
+    const csv = [headers.join(","), ...rows].join("\n");
+    const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a"); a.href = url; a.download = "ventas_export.csv"; a.click();
+    URL.revokeObjectURL(url);
+  }
 
   // ── KPI calc helper ────────────────────────────────────────────────────────
 
@@ -339,7 +388,7 @@ export function MHDashboard({ rows, onReset }: MHDashboardProps) {
     return { totalMoney, invoices, clients, totalCant, ticketProm, prodPerVenta };
   }
 
-  const kpis     = useMemo(() => calcKPIs(currentData), [currentData, currency]);
+  const kpis     = useMemo(() => calcKPIs(activeData), [activeData, currency]);
   const prevKpis = useMemo(() => calcKPIs(prevData), [prevData, currency]);
 
   function pctChange(curr: number, prev: number): number | null {
@@ -352,7 +401,7 @@ export function MHDashboard({ rows, onReset }: MHDashboardProps) {
   const ventasDia = useMemo(() => {
     const map = new Map<number, { money: number; count: number }>();
     DAYS_ORDER.forEach((d) => map.set(d, { money: 0, count: 0 }));
-    currentData.forEach((r) => {
+    activeData.forEach((r) => {
       if (!r.fecha) return;
       const d = r.fecha.getDay();
       const prev = map.get(d) ?? { money: 0, count: 0 };
@@ -363,13 +412,13 @@ export function MHDashboard({ rows, onReset }: MHDashboardProps) {
       money: map.get(d)?.money ?? 0,
       count: map.get(d)?.count ?? 0,
     })).filter((d) => d.money > 0 || d.count > 0);
-  }, [currentData, currency]);
+  }, [activeData, currency]);
 
   // ── Tipo de comprobante ────────────────────────────────────────────────────
 
   const tipoComp = useMemo(() => {
     const map = new Map<string, number>();
-    currentAll.forEach((r) => {
+    activeData.forEach((r) => {
       const k = r.tipo || "Sin tipo";
       map.set(k, (map.get(k) ?? 0) + amt(r));
     });
@@ -381,13 +430,13 @@ export function MHDashboard({ rows, onReset }: MHDashboardProps) {
         pct: total > 0 ? (value / total) * 100 : 0,
         color: PIE_COLORS[i % PIE_COLORS.length],
       }));
-  }, [currentAll, currency]);
+  }, [activeData, currency]);
 
   // ── Formas de pago ────────────────────────────────────────────────────────
 
   const formaPago = useMemo(() => {
     const map = new Map<string, number>();
-    currentData.forEach((r) => {
+    activeData.forEach((r) => {
       const k = r.formaPago || "Sin especificar";
       map.set(k, (map.get(k) ?? 0) + amt(r));
     });
@@ -399,13 +448,13 @@ export function MHDashboard({ rows, onReset }: MHDashboardProps) {
         pct: total > 0 ? (value / total) * 100 : 0,
         color: PIE_COLORS[i % PIE_COLORS.length],
       }));
-  }, [currentData, currency]);
+  }, [activeData, currency]);
 
   // ── Ventas por vertical ───────────────────────────────────────────────────
 
   const vertical = useMemo(() => {
     const map = new Map<string, number>();
-    currentData.forEach((r) => {
+    activeData.forEach((r) => {
       const k = r.vertical || "Sin vertical";
       map.set(k, (map.get(k) ?? 0) + amt(r));
     });
@@ -417,13 +466,13 @@ export function MHDashboard({ rows, onReset }: MHDashboardProps) {
         pct: total > 0 ? (value / total) * 100 : 0,
         color: PIE_COLORS[i % PIE_COLORS.length],
       }));
-  }, [currentData, currency]);
+  }, [activeData, currency]);
 
   // ── Top productos ─────────────────────────────────────────────────────────
 
   const topProductos = useMemo(() => {
     const map = new Map<string, { money: number; cant: number }>();
-    currentData.forEach((r) => {
+    activeData.forEach((r) => {
       const k = (r.descripcion || r.articulo || "Sin descripción").trim();
       const prev = map.get(k) ?? { money: 0, cant: 0 };
       map.set(k, { money: prev.money + amt(r), cant: prev.cant + r.cantidad });
@@ -436,13 +485,32 @@ export function MHDashboard({ rows, onReset }: MHDashboardProps) {
         money: v.money,
         cant: v.cant,
       }));
-  }, [currentData, currency]);
+  }, [activeData, currency]);
+
+  // ── Top clientes ──────────────────────────────────────────────────────────
+
+  const topClientes = useMemo(() => {
+    const map = new Map<string, { money: number; count: number }>();
+    activeData.forEach((r) => {
+      const k = (r.cliente || "Sin nombre").trim();
+      const prev = map.get(k) ?? { money: 0, count: 0 };
+      map.set(k, { money: prev.money + amt(r), count: prev.count + 1 });
+    });
+    return Array.from(map.entries())
+      .sort(([, a], [, b]) => b.money - a.money)
+      .slice(0, 10)
+      .map(([cliente, v]) => ({
+        cliente: cliente.length > 28 ? cliente.slice(0, 26) + "…" : cliente,
+        money: v.money,
+        count: v.count,
+      }));
+  }, [activeData, currency]);
 
   // ── Ventas por categoría ──────────────────────────────────────────────────
 
   const categoria = useMemo(() => {
     const map = new Map<string, number>();
-    currentData.forEach((r) => {
+    activeData.forEach((r) => {
       const k = r.categoria || "Sin categoría";
       map.set(k, (map.get(k) ?? 0) + amt(r));
     });
@@ -450,7 +518,7 @@ export function MHDashboard({ rows, onReset }: MHDashboardProps) {
       .sort(([, a], [, b]) => b - a)
       .slice(0, 15)
       .map(([cat, money]) => ({ cat, money }));
-  }, [currentData, currency]);
+  }, [activeData, currency]);
 
   // ── Comparación interanual ────────────────────────────────────────────────
 
@@ -540,6 +608,30 @@ export function MHDashboard({ rows, onReset }: MHDashboardProps) {
             </button>
           </div>
 
+          {/* Export CSV */}
+          <button
+            onClick={exportCSV}
+            className="flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-full border transition-colors hover:bg-slate-50"
+            style={{ borderColor: "#E2E8F0", color: "#64748B" }}
+            title="Exportar datos filtrados como CSV"
+          >
+            <Download size={13} />
+            Exportar
+          </button>
+
+          {/* Toggle tabla */}
+          <button
+            onClick={() => setShowTable((v) => !v)}
+            className="text-sm px-3 py-1.5 rounded-full border transition-colors"
+            style={{
+              borderColor: showTable ? PINK : "#E2E8F0",
+              color: showTable ? PINK : "#64748B",
+              background: showTable ? PINK_PALE : "#fff",
+            }}
+          >
+            {showTable ? "Ver gráficos" : "Ver tabla"}
+          </button>
+
           {/* Reset */}
           {onReset && (
             <button
@@ -567,53 +659,133 @@ export function MHDashboard({ rows, onReset }: MHDashboardProps) {
             {showDatePicker && (
               <div
                 className="absolute right-0 top-10 z-50 rounded-xl border p-4 shadow-xl flex flex-col gap-3"
-                style={{ background: "#fff", borderColor: "#E2E8F0", minWidth: 280 }}
+                style={{ background: "#fff", borderColor: "#E2E8F0", minWidth: 300 }}
               >
+                {/* Presets */}
                 <div>
-                  <label className="text-xs font-medium mb-1 block" style={{ color: "#64748B" }}>Desde</label>
-                  <input
-                    type="date"
-                    value={filterStart}
-                    min={minDate}
-                    max={filterEnd || maxDate}
-                    onChange={(e) => setFilterStart(e.target.value)}
-                    className="w-full text-sm border rounded-lg px-3 py-1.5 focus:outline-none"
-                    style={{ borderColor: "#E2E8F0", color: "#0F1419" }}
-                  />
+                  <p className="text-xs font-medium mb-2" style={{ color: "#64748B" }}>Accesos rápidos</p>
+                  <div className="grid grid-cols-3 gap-1.5">
+                    {[
+                      { label: "Últ. 7 días", value: "7d" },
+                      { label: "Últ. 30 días", value: "30d" },
+                      { label: "Este mes", value: "mes" },
+                      { label: "Últ. 3 meses", value: "3m" },
+                      { label: "Este año", value: "año" },
+                      { label: "Todo", value: "todo" },
+                    ].map((p) => (
+                      <button
+                        key={p.value}
+                        onClick={() => applyPreset(p.value)}
+                        className="text-xs py-1.5 px-2 rounded-lg border transition-colors hover:bg-slate-50"
+                        style={{ borderColor: "#E2E8F0", color: "#64748B" }}
+                      >
+                        {p.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-                <div>
-                  <label className="text-xs font-medium mb-1 block" style={{ color: "#64748B" }}>Hasta</label>
-                  <input
-                    type="date"
-                    value={filterEnd}
-                    min={filterStart || minDate}
-                    max={maxDate}
-                    onChange={(e) => setFilterEnd(e.target.value)}
-                    className="w-full text-sm border rounded-lg px-3 py-1.5 focus:outline-none"
-                    style={{ borderColor: "#E2E8F0", color: "#0F1419" }}
-                  />
+                <div style={{ borderTop: "1px solid #F0F0F0", paddingTop: 12 }}>
+                  <div className="mb-3">
+                    <label className="text-xs font-medium mb-1 block" style={{ color: "#64748B" }}>Desde</label>
+                    <input
+                      type="date"
+                      value={filterStart}
+                      min={minDate}
+                      max={filterEnd || maxDate}
+                      onChange={(e) => setFilterStart(e.target.value)}
+                      className="w-full text-sm border rounded-lg px-3 py-1.5 focus:outline-none"
+                      style={{ borderColor: "#E2E8F0", color: "#0F1419" }}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs font-medium mb-1 block" style={{ color: "#64748B" }}>Hasta</label>
+                    <input
+                      type="date"
+                      value={filterEnd}
+                      min={filterStart || minDate}
+                      max={maxDate}
+                      onChange={(e) => setFilterEnd(e.target.value)}
+                      className="w-full text-sm border rounded-lg px-3 py-1.5 focus:outline-none"
+                      style={{ borderColor: "#E2E8F0", color: "#0F1419" }}
+                    />
+                  </div>
                 </div>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => { setFilterStart(minDate); setFilterEnd(maxDate); }}
-                    className="flex-1 text-xs py-1.5 rounded-lg border"
-                    style={{ borderColor: "#E2E8F0", color: "#64748B" }}
-                  >
-                    Todo el período
-                  </button>
-                  <button
-                    onClick={() => setShowDatePicker(false)}
-                    className="flex-1 text-xs py-1.5 rounded-lg text-white font-semibold"
-                    style={{ background: PINK }}
-                  >
-                    Aplicar
-                  </button>
-                </div>
+                <button
+                  onClick={() => setShowDatePicker(false)}
+                  className="w-full text-xs py-1.5 rounded-lg text-white font-semibold"
+                  style={{ background: PINK }}
+                >
+                  Aplicar
+                </button>
               </div>
             )}
           </div>
         </div>
       </div>
+
+      {/* ── Tabla de datos ── */}
+      {showTable && (
+        <div
+          className="rounded-2xl border overflow-hidden"
+          style={{ border: "1px solid #f0f0f0", boxShadow: "0 1px 4px rgba(0,0,0,0.05)" }}
+        >
+          <div className="flex items-center justify-between px-5 py-4 border-b" style={{ borderColor: "#f0f0f0", background: "#fff" }}>
+            <div>
+              <p className="font-semibold text-[15px]" style={{ color: "#0F1419" }}>Datos filtrados</p>
+              <p className="text-xs mt-0.5" style={{ color: "#94A3B8" }}>{activeData.length.toLocaleString("es-AR")} filas</p>
+            </div>
+            <input
+              type="text"
+              placeholder="Buscar cliente, artículo..."
+              value={tableSearch}
+              onChange={(e) => setTableSearch(e.target.value)}
+              className="text-sm border rounded-lg px-3 py-1.5 focus:outline-none"
+              style={{ borderColor: "#E2E8F0", color: "#0F1419", width: 240 }}
+            />
+          </div>
+          <div style={{ overflowX: "auto", maxHeight: 440, overflowY: "auto" }}>
+            <table className="w-full text-xs" style={{ borderCollapse: "collapse" }}>
+              <thead style={{ background: "#F8FAFC", position: "sticky", top: 0 }}>
+                <tr>
+                  {["Fecha","Cliente","Tipo","Artículo","Categoría","Vertical","Forma Pago","Cantidad","Monto ARS","Monto USD"].map((h) => (
+                    <th key={h} className="text-left px-3 py-2.5 font-semibold whitespace-nowrap" style={{ color: "#64748B", borderBottom: "1px solid #f0f0f0" }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {activeData
+                  .filter((r) => {
+                    if (!tableSearch) return true;
+                    const q = tableSearch.toLowerCase();
+                    return r.cliente.toLowerCase().includes(q) || r.articulo.toLowerCase().includes(q) || r.descripcion.toLowerCase().includes(q) || r.categoria.toLowerCase().includes(q);
+                  })
+                  .slice(0, 500)
+                  .map((r, i) => (
+                    <tr key={i} style={{ borderBottom: "1px solid #f9f9f9", background: i % 2 === 0 ? "#fff" : "#FAFAFA" }}>
+                      <td className="px-3 py-2 whitespace-nowrap" style={{ color: "#64748B" }}>{r.fecha ? `${String(r.fecha.getDate()).padStart(2,"0")}/${String(r.fecha.getMonth()+1).padStart(2,"0")}/${r.fecha.getFullYear()}` : "-"}</td>
+                      <td className="px-3 py-2 max-w-[160px] truncate" style={{ color: "#0F1419" }}>{r.cliente || "-"}</td>
+                      <td className="px-3 py-2 whitespace-nowrap" style={{ color: "#64748B" }}>{r.tipo || "-"}</td>
+                      <td className="px-3 py-2 max-w-[160px] truncate" style={{ color: "#0F1419" }}>{r.descripcion || r.articulo || "-"}</td>
+                      <td className="px-3 py-2 whitespace-nowrap" style={{ color: "#64748B" }}>{r.categoria || "-"}</td>
+                      <td className="px-3 py-2 whitespace-nowrap" style={{ color: "#64748B" }}>{r.vertical || "-"}</td>
+                      <td className="px-3 py-2 whitespace-nowrap" style={{ color: "#64748B" }}>{r.formaPago || "-"}</td>
+                      <td className="px-3 py-2 text-right whitespace-nowrap" style={{ color: "#0F1419" }}>{fmtN(r.cantidad)}</td>
+                      <td className="px-3 py-2 text-right whitespace-nowrap font-medium" style={{ color: PINK }}>{fmtARS(r.montoArs)}</td>
+                      <td className="px-3 py-2 text-right whitespace-nowrap" style={{ color: "#64748B" }}>{fmtUSD(r.montoUsd)}</td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+            {activeData.filter((r) => {
+              if (!tableSearch) return true;
+              const q = tableSearch.toLowerCase();
+              return r.cliente.toLowerCase().includes(q) || r.articulo.toLowerCase().includes(q) || r.descripcion.toLowerCase().includes(q) || r.categoria.toLowerCase().includes(q);
+            }).length > 500 && (
+              <p className="text-center py-3 text-xs" style={{ color: "#94A3B8" }}>Mostrando primeras 500 filas. Exportá el CSV para ver todos los datos.</p>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* ── KPI Cards ── */}
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
@@ -783,8 +955,44 @@ export function MHDashboard({ rows, onReset }: MHDashboardProps) {
         </SectionCard>
       </div>
 
-      {/* ── Row: Top productos + Categoría ── */}
+      {/* ── Row: Top productos + Top clientes ── */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+
+        <SectionCard title="Top 10 Clientes" subtitle="Clientes con mayor facturación en el período">
+          <ResponsiveContainer width="100%" height={320}>
+            <BarChart data={topClientes} layout="vertical" margin={{ top: 0, right: 60, left: 0, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#F1F5F9" />
+              <XAxis
+                type="number"
+                tick={{ fontSize: 10, fill: "#94A3B8" }}
+                axisLine={false} tickLine={false}
+                tickFormatter={(v) => fmtMoney(v, true)}
+              />
+              <YAxis
+                type="category"
+                dataKey="cliente"
+                tick={{ fontSize: 10, fill: "#64748B" }}
+                axisLine={false} tickLine={false}
+                width={140}
+              />
+              <Tooltip
+                contentStyle={TOOLTIP_STYLE}
+                formatter={(v: number, name: string, props) => [
+                  `${fmtMoney(v)} · ${props.payload.count} comprobantes`,
+                  "Facturación",
+                ]}
+              />
+              <Bar dataKey="money" fill={PURPLE} radius={[0, 5, 5, 0]}>
+                <LabelList
+                  dataKey="money"
+                  position="right"
+                  formatter={(v: number) => fmtMoney(v, true)}
+                  style={{ fontSize: 10, fill: "#94A3B8" }}
+                />
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </SectionCard>
 
         <SectionCard title="Top 10 Productos" subtitle="Productos con mayor facturación">
           <ResponsiveContainer width="100%" height={320}>
@@ -818,36 +1026,37 @@ export function MHDashboard({ rows, onReset }: MHDashboardProps) {
             </BarChart>
           </ResponsiveContainer>
         </SectionCard>
-
-        <SectionCard
-          title="Facturación por Categoría"
-          subtitle={`Facturación en ${currency} agrupada por categoría de producto`}
-        >
-          <ResponsiveContainer width="100%" height={320}>
-            <BarChart data={categoria} margin={{ top: 10, right: 10, left: 0, bottom: 30 }}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F1F5F9" />
-              <XAxis
-                dataKey="cat"
-                tick={{ fontSize: 10, fill: "#94A3B8" }}
-                axisLine={false} tickLine={false}
-                angle={-35}
-                textAnchor="end"
-                interval={0}
-              />
-              <YAxis
-                tick={{ fontSize: 10, fill: "#94A3B8" }}
-                axisLine={false} tickLine={false}
-                tickFormatter={(v) => fmtMoney(v, true)}
-              />
-              <Tooltip
-                contentStyle={TOOLTIP_STYLE}
-                formatter={(v: number) => [fmtMoney(v), "Facturación"]}
-              />
-              <Bar dataKey="money" fill={PINK} radius={[5, 5, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </SectionCard>
       </div>
+
+      {/* ── Facturación por Categoría ── */}
+      <SectionCard
+        title="Facturación por Categoría"
+        subtitle={`Facturación en ${currency} agrupada por categoría de producto`}
+      >
+        <ResponsiveContainer width="100%" height={320}>
+          <BarChart data={categoria} margin={{ top: 10, right: 10, left: 0, bottom: 30 }}>
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F1F5F9" />
+            <XAxis
+              dataKey="cat"
+              tick={{ fontSize: 10, fill: "#94A3B8" }}
+              axisLine={false} tickLine={false}
+              angle={-35}
+              textAnchor="end"
+              interval={0}
+            />
+            <YAxis
+              tick={{ fontSize: 10, fill: "#94A3B8" }}
+              axisLine={false} tickLine={false}
+              tickFormatter={(v) => fmtMoney(v, true)}
+            />
+            <Tooltip
+              contentStyle={TOOLTIP_STYLE}
+              formatter={(v: number) => [fmtMoney(v), "Facturación"]}
+            />
+            <Bar dataKey="money" fill={PINK} radius={[5, 5, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
+      </SectionCard>
 
       {/* ── Comparación Interanual ── */}
       {interanualYears.length > 0 && (
