@@ -1,30 +1,10 @@
 import React from "react"
 import type { Metadata } from 'next'
-import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
-// Metadata configuration
 export const metadata: Metadata = {
-  title: 'Analisis de Recompra por Cohorte | Tiendanube',
-  description: 'Analiza cohortes de clientes y comportamiento de recompra desde tus exportaciones de ordenes de Tiendanube',
-  generator: 'v0.app',
-  icons: {
-    icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
-    ],
-    apple: '/apple-icon.png',
-  },
+  title: 'Dashboard de Ventas | Mundo Hogar',
+  description: 'Análisis completo de ventas y facturación',
 }
 
 export default function RootLayout({
@@ -34,11 +14,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body className={`font-sans antialiased`}>
-        <div className="flex h-screen bg-background">
-          {children}
-        </div>
-        <Analytics />
+      <body className="font-sans antialiased">
+        {children}
       </body>
     </html>
   )
