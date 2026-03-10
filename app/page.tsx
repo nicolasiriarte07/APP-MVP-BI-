@@ -5,7 +5,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ImportDialog } from "@/components/data-import/import-dialog";
 import { MHDashboard } from "@/components/mundohogar/mh-dashboard";
-import type { ColumnMapping } from "@/lib/column-detection";
 import { BarChart2, Home, Upload, FileUp } from "lucide-react";
 
 export default function DashboardPage() {
@@ -13,11 +12,6 @@ export default function DashboardPage() {
   const [rows, setRows] = useState<Record<string, string>[]>([]);
 
   const hasData = rows.length > 0;
-
-  function handleImport(imported: Record<string, string>[], _map: ColumnMapping) {
-    setRows(imported);
-    setImportOpen(false);
-  }
 
   return (
     <div className="flex min-h-screen" style={{ background: "#F8FAFC" }}>
@@ -84,7 +78,7 @@ export default function DashboardPage() {
       <ImportDialog
         open={importOpen}
         onClose={() => setImportOpen(false)}
-        onImport={handleImport}
+        onImport={(imported) => setRows(imported)}
       />
     </div>
   );
